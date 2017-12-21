@@ -5,10 +5,8 @@ namespace kallup {
 CafeSession::CafeSession()
 {
     display = new CafeDisplay;
-    if (!display->is_ok()) {
-        delete display;
-        exit(1);
-    }
+    if (!display->is_ok())
+    throw display;
 }
 
 CafeSession::~CafeSession()

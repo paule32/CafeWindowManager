@@ -12,10 +12,16 @@ extern "C" {
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 #include <X11/xpm.h>
+
+#include <unistd.h>
+#include <execinfo.h>
+#include <signal.h>
+
 };
 
 #include <iostream>
 #include <string>
 #include <list>
+#include <exception>
 
 #endif  // __CAFEWM_H__

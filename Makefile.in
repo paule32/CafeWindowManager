@@ -4,20 +4,50 @@
 # Copyright (c) 2017 Jens Kallup
 # only for DVECAFE!
 #-----------------------------------------------------
-SHELL=/bin/sh
+OS      = Linux
+VERSION = 0.0.1
 
-@SET_MAKE@
+BINARY  = cafewm
 
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-subdirs=src
+CC        = gcc
+CXX       = g++
+CFLAGS   :=
+CFLAGS   += -O2 -DVERSION=\"${VERSION}\"
+CFLAGS   += -Wall -Wextra -Werror
+CFLAGS   += -D_REENTRANT -DXPM
+INCLUDES  = -I$(SRCDIR)/include -I/usr/include -I/usr/include/X11
+CXXFLAGS  = ${CFLAGS} ${INCLUDES}
+LIBS      = -lXpm -lXext -lX11 -L../lib -lstdc++
 
-CFLAGS=-O2
+SHELL    = /bin/sh
+ECHO     = echo
+RM       = rm -rf
+MKDIR    = mkdir
+CLS      = reset
+COPY     = cp
+INSTALL  = install
+MAKE     = make
+
+MAKDIR   = $(PWD)
+SRCDIR   = $(MAKDIR)/src
+OBJDIR   = $(SRCDIR)/.objs
+
+#--------------------------------------------------------
+# export defined variables, to use it in src/Makefile ...
+#--------------------------------------------------------
+export ECHO RM MAKDIR CC CXX CFLAGS CXXFLAGS LIBS
+export CLS COPY
+export BINARY SRCDIR OBJDIR
+
+subdirs  = src
 
 all:
+	${CLS}
+	$(RM) bin
+	$(MKDIR) bin
 	@for i in ${subdirs}; do \
 		echo Making all in $$i ; \
-		(cd $$i; ${MAKE} all) \
+		(cd $$i; mkdir .objs; ${MAKE} all) \
 	done
 
 install:
@@ -35,17 +65,21 @@ depend:
 clean:
 	@for i in ${subdirs}; do \
 		echo Cleaning in $$i ; \
-		(cd $$i; ${MAKE} clean) \
+		(cd $$i; rm -rf .objs; ${MAKE} clean) \
 	done
-	rm -rf config-status
-	rm -rf config-log
-	rm -rf config-cache
-	rm -rf Makefile
+	rm -rf config-status config-log config-cache Makefile
 
 distclean:
 	@for i in ${subdirs}; do \
 		echo Distribution Cleaning in $$i ; \
-		(cd $$i; ${MAKE} distclean) \
+		(cd $$i; rm -rf .objs; ${MAKE} distclean) \
 	done
 	rm -f config.cache config.status config.log
 	find . -name Makefile -exec rm {} \; -print
+
+
+help:
+	@$(ECHO) "Targets:"
+	@$(ECHO) "all     - buildcompile what is necessary"
+	@$(ECHO) "clean   - cleanup old .o and .bin"
+	@$(ECHO) "install - not yet fully supported"

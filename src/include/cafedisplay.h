@@ -11,8 +11,9 @@ public:
     std::string name() const;
 private:
     bool is_open;
-    Display *dpy;
-    std::string dsp_name;
+    Display     * display_device;
+    int           display_screen;
+    std::string   display_name;
 };
 }  // namespace: kallup
 

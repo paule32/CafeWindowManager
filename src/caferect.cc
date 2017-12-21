@@ -1,4 +1,5 @@
 #include <cafewm.h>
+#include <caferect.h>
 
 namespace kallup {
 CafeRect::CafeRect()

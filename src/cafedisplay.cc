@@ -4,17 +4,18 @@
 namespace kallup {
 CafeDisplay::CafeDisplay()
 {
-    dsp_name  = std::string("localhost:0.0");
-    is_open   = false;
-    if (!(dpy = ::XOpenDisplay(dsp_name.c_str()))) {
+    display_name = std::string(nullptr);
+    is_open = false;
+    if (!(display_device = ::XOpenDisplay(display_name.c_str()))) {
         std::cout
         << "Error: can't open Display: "
-        << ::XDisplayName(dsp_name.c_str())
+        << XDisplayName(display_name.c_str())
         <<
         std::endl;
         is_open = false;
         return;
     }
+    display_screen = XDefaultScreen(display_device);
     is_open = true;
 }
 

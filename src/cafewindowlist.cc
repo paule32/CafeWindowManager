@@ -1,8 +1,8 @@
 #include <cafewm.h>
-#include <cafedesktop.h>
+#include <cafewindowlist.h>
 
 namespace kallup {
-CafeDesktop::CafeDesktop()
+CafeWindowList::CafeWindowList()
 {
 }
 

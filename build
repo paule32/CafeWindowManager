@@ -1,0 +1,8 @@
+#!/bin/sh
+make clean
+rm -rf config.cache config.status config.log
+rm -rf Makefile configure
+autoconf configure.in > configure
+chmod u+x configure
+./configure
+make

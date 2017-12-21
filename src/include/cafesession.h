@@ -10,7 +10,7 @@ public:
     explicit CafeSession();
     ~CafeSession();
 private:
-    class CafeDisplay *display;
+    CafeDisplay * display;
 };
 }  // namespace: kallup
 #endif  // __CAFERECT_H__

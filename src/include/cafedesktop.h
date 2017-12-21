@@ -1,6 +1,9 @@
 #ifndef __CAFEDESKTOP_H__
 #define __CAFEDESKTOP_H__
 
+#include <cafewm.h>
+#include <cafewindowlist.h>
+
 // ---------------------------
 // the desktop of a client ...
 // ---------------------------
