@@ -11,6 +11,7 @@ private:
     
 public:
     CafeErrorHandler();
+    void start(int,char**);
 }; // class: CafeErrorHandler
 
 }  // namespace: kallup

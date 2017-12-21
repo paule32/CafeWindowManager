@@ -7,6 +7,8 @@ namespace kallup {
 class CafeDisplay {
 public:
     explicit CafeDisplay();
+    ~CafeDisplay();
+    
     inline bool is_ok() { return is_open; }
     std::string name() const;
 private:
