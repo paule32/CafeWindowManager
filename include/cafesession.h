@@ -2,6 +2,7 @@
 #define __CAFERECT_H__
 
 #include <cafewm.h>
+#include <cafedisplay.h>
 
 namespace kallup {
 class CafeSession {
@@ -9,7 +10,7 @@ public:
     explicit CafeSession();
     ~CafeSession();
 private:
-    CafeDisplay *display;
+    class CafeDisplay *display;
 };
 }  // namespace: kallup
 #endif  // __CAFERECT_H__

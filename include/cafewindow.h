@@ -1,6 +1,9 @@
 #ifndef __CAFEWINDOW_H__
 #define __CAFEWINDOW_H__
 
+#include <cafewm.h>
+#include <caferect.h>
+
 // ---------------------------------------
 // window structure for client desktop ... 
 // ---------------------------------------

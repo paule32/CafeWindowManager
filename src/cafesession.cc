@@ -1,4 +1,5 @@
 #include <cafedisplay.h>
+#include <cafesession.h>
 
 namespace kallup {
 CafeSession::CafeSession()

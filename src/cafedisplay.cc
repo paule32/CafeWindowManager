@@ -1,9 +1,11 @@
 #include <cafewm.h>
+#include <cafedisplay.h>
 
 namespace kallup {
-CafeDisplay::CafeDisplay(void)
+CafeDisplay::CafeDisplay()
 {
     dsp_name  = std::string("localhost:0.0");
+    is_open   = false;
     if (!(dpy = ::XOpenDisplay(dsp_name.c_str()))) {
         std::cout
         << "Error: can't open Display: "
@@ -15,7 +17,5 @@ CafeDisplay::CafeDisplay(void)
     }
     is_open = true;
 }
-
-bool CafeDisplay::is_ok() { return is_open; }
 
 }  // namespace: kallup

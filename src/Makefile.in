@@ -19,9 +19,9 @@ LIBS=-L${top_srcdir}/libs ${x_libraries} ${XPM_LIBRARY} ${XEXT_LIBRARY} ${X_LIBR
 
 EXTRA_DEFINES=-DXPM
 
-CC=g++ -std=c++11
+CC=g++
 INCLUDES=-I${top_srcdir}/include -I/usr/include -I/usr/include/X11
-CXXFLAGS=${INCLUDES} ${EXTRA_DEFINES} 
+CXXFLAGS=${INCLUDES} ${EXTRA_DEFINES} -Wall -Wextra -Werror
 MAKEDEPEND=@MAKEDEPEND@
 INSTALL=@INSTALL@
 INSTALL_PROGRAM=@INSTALL_PROGRAM@
