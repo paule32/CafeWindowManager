@@ -1,8 +1,9 @@
-#ifndef __CAFERECT_H__
-#define __CAFERECT_H__
+#ifndef __CAFESESSION_H__
+#define __CAFESESSION_H__
 
 #include <cafewm.h>
 #include <cafedisplay.h>
+#include <cafedesktop.h>
 
 namespace kallup {
 class CafeSession {
@@ -11,7 +12,8 @@ public:
     ~CafeSession();
 private:
     CafeDisplay * display;
+    CafeDesktop * desktop;
 };
 }  // namespace: kallup
-#endif  // __CAFERECT_H__
+#endif  // __CAFESESSION_H__
 

@@ -1,5 +1,5 @@
-#ifndef __CAFEDISPLAY_H__
-#define __CAFEDISPLAY_H__
+#ifndef __CAFERECT_H__
+#define __CAFERECT_H__
 
 namespace kallup {
 class CafeRect {

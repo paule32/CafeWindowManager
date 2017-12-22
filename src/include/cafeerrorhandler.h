@@ -1,3 +1,6 @@
+#ifndef __CAFEERRORHANDLER_H__
+#define __CAFEERRORHANDLER_H__
+
 #include <cafewm.h>
 
 namespace kallup {
@@ -15,3 +18,4 @@ public:
 }; // class: CafeErrorHandler
 
 }  // namespace: kallup
+#endif // __CAFEERRORHANDLER_H__

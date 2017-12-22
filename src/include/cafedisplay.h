@@ -11,7 +11,7 @@ public:
     
     inline bool is_ok() { return is_open; }
     std::string name() const;
-private:
+
     bool is_open;
     Display     * display_device;
     int           display_screen;

@@ -12,7 +12,7 @@ BINARY  = cafewm
 CC        = gcc
 CXX       = g++
 CFLAGS   :=
-CFLAGS   += -O2 -DVERSION=\"${VERSION}\"
+CFLAGS   += -O2 -DVERSION=\"${VERSION}\" -g
 CFLAGS   += -Wall -Wextra -Werror
 CFLAGS   += -D_REENTRANT -DXPM
 INCLUDES  = -I$(SRCDIR)/include -I/usr/include -I/usr/include/X11
