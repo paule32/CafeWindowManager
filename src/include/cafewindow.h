@@ -25,6 +25,9 @@ public:
     CafeDisplay * display() const;
     std::string title() const;
     
+    int width () const;
+    int height() const;
+    
     XSizeHints hintsFlags();
     
     int minWidth();
@@ -43,6 +46,9 @@ public:
     void setPos(CafeRect);
     
     void setFlags(int);
+    
+    void setWidth (int);
+    void setHeight(int);
    
     void setMinWidth(int);
     void setMaxWidth(int);
@@ -50,7 +56,7 @@ public:
     void setMinHeight(int);
     void setMaxHeight(int);
     
-    int showModal();
+    int  showModal();
     void drawGraphics();
 
     static int    win_id;

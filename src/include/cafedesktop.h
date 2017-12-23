@@ -13,14 +13,18 @@ class CafeDesktop {
 public:
     explicit CafeDesktop();
     explicit CafeDesktop(CafeDisplay*);
-    
-    ~CafeDesktop();
+            ~CafeDesktop();
     
     std::list<CafeWindowList> windows;
 
-    CafeDisplay * display;
+    CafeDisplay * display() const;
+    void setDisplay(CafeDisplay*);
+    
+private:
+    CafeDisplay * display_class;
     CafeWindow  * root_window;
     CafeWindow  * root_desktop;
+    CafeWindow  * root_taskbar;
     
 private:
     void init();

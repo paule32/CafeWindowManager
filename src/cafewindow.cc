@@ -25,6 +25,18 @@ void CafeWindow::setTitle(std::string v) { win_title = v; }
 void CafeWindow::setPos(CafeRect v) { win_pos = v; }
 void CafeWindow::setWindowGC(GC v) { win_gc = v; }
 
+void CafeWindow::setWidth(int v)
+{
+    CafeRect rect;
+    rect.setWidth(v);
+}
+
+void CafeWindow::setHeight(int v)
+{
+    CafeRect rect;
+    rect.setHeight(v);
+}
+
 void CafeWindow::setFlags(int v) { size_hints.flags = v; }
 
 void CafeWindow::setMinWidth(int v) { size_hints.min_width = v; }
@@ -39,17 +51,17 @@ int CafeWindow::maxWidth() { return size_hints.max_width; }
 int CafeWindow::minHeight() { return size_hints.min_height; }
 int CafeWindow::maxHeight() { return size_hints.max_height; }
 
+int CafeWindow::width () const { return pos().width (); }
+int CafeWindow::height() const { return pos().height(); }
+
 XSizeHints CafeWindow::hintsFlags() { return size_hints; }
 
-
 CafeWindow::~CafeWindow() { }
-
 int CafeWindow::showModal()
 {
     XMapWindow(
-    display()->display_device,
-    window());
-
+        display()->display(),
+        window());
     return 0;
 }
 
@@ -57,29 +69,36 @@ void CafeWindow::drawGraphics()
 {
     //if (windowGC() == nullptr)
     win_gc = XCreateGC(
-        display()->display_device,
+        display()->display(),
         window (),
         0,0);
     current_window = this;
 
+    XWindowAttributes attrs;
+    XGetWindowAttributes(
+        display()->display(),
+        window (),
+        &attrs);
+        
     // -----------------------
     // 0=root, 1=desktop, ...
     // -----------------------
     if (HWND() == 0) {
-        CafeColor col(0,255,100);
+        CafeColor col(this,0,100,150);
         XFillRectangle(
-            display()->display_device,
+            display()->display(),
             window(),
             windowGC(),
             0, 0,
-            200,200);
+            attrs.width,
+            attrs.height);
     }
     
     // --------------------------
     // clear, and free buffer ...
     // --------------------------
-    XFlush (display()->display_device);
-    XFreeGC(display()->display_device, windowGC());
+    XFlush (display()->display());
+    XFreeGC(display()->display(), windowGC());
 }
 
 }  // namespace: kallup

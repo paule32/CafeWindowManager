@@ -6,12 +6,6 @@
 #include <iomanip>
 
 namespace kallup {
-extern XVisualInfo  current_vinfo  ;
-extern Visual     * current_visual ;
-extern Screen       current_screen ;
-extern CafeWindow * current_window ;
-extern Display    * current_display;
-
 CafeColor::CafeColor()
 {
     // default: white ...
@@ -19,14 +13,19 @@ CafeColor::CafeColor()
 }
 
 CafeColor::CafeColor(
+    CafeWindow *win,
     int r,
     int g,
     int b)
 {
+    setWindow(win);
     setColor(r,g,b);
 }
 
-XColor CafeColor::color() const { return color_intern; }
+XColor       CafeColor::color () const { return color_intern; }
+CafeWindow * CafeColor::window() const { return color_window; }
+
+void CafeColor::setWindow(CafeWindow *v) { color_window = v; }
 
 void CafeColor::setColor(XColor v) { color_intern       = v; color_intern.flags = DoRed | DoBlue | DoGreen; }
 void CafeColor::setRed  (int    v) { color_intern.red   = v; color_intern.flags = DoRed | DoBlue | DoGreen; }
@@ -46,17 +45,16 @@ void CafeColor::setColor(
     unsigned long int c = 0;
     
     color_map = XCreateColormap(
-        current_window->display()->display_device,
-        current_window->window(),
-        current_visual,
+        window()->display()->display(),
+        window()->window (),
+        window()->display()->visual(),
         0);
 
     setRed  (v1);
     setGreen(v2);
     setBlue (v3);
 
-    sprintf(buffer,
-    "0x00%02x%02x%02x",
+    sprintf(buffer,"0x00%02x%02x%02x",
     red(),green(),blue());
     
     std::stringstream ss;
@@ -67,8 +65,8 @@ void CafeColor::setColor(
     ss >> c;
 
     XSetForeground(
-        current_window->display()->display_device,
-        current_window->windowGC(),c);
+        window()->display()->display(),
+        window()->windowGC(),c);
 }
 
 }  // namespace: kallup

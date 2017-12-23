@@ -1,30 +1,30 @@
 #include <cafewm.h>
 #include <cafedesktop.h>
 #include <cafewindow.h>
+#include <cafedisplay.h>
 
 namespace kallup  {
-XVisualInfo  current_vinfo  ;
-Visual     * current_visual ;
-int          current_screen ;
-int          current_depth  ;
 CafeWindow * current_window ;
-Display    * current_display;
 CafeDesktop::CafeDesktop(CafeDisplay * displ)
 {
-    root_window = new CafeWindow;
-    display = displ;
-
-    if (!XMatchVisualInfo (display->display_device, 0, 32, TrueColor, &current_vinfo))
-    if (!XMatchVisualInfo (display->display_device, 0, 24, TrueColor, &current_vinfo))
-    if (!XMatchVisualInfo (display->display_device, 0, 16, TrueColor, &current_vinfo)) {
+    XVisualInfo vinfo;
+    setDisplay(displ);
+        
+    if (!XMatchVisualInfo(display()->display(), 0, 32, TrueColor, &vinfo))
+    if (!XMatchVisualInfo(display()->display(), 0, 24, TrueColor, &vinfo))
+    if (!XMatchVisualInfo(display()->display(), 0, 16, TrueColor, &vinfo))
+    {
         std::cout
         << "Cannot get TrueColor Visual!"
         << std::endl;
         exit(EXIT_FAILURE);
     }
-    current_visual = current_vinfo.visual;
-    current_depth  = current_vinfo.depth;
-    current_screen = current_vinfo.screen;
+    
+    display()->setVisual(vinfo.visual);
+    display()->setDepth (vinfo.depth );
+    display()->setScreen(vinfo.screen);
+
+    root_window = new CafeWindow;
  
     init();
 }
@@ -33,27 +33,35 @@ CafeDesktop::CafeDesktop()
 {
 }
 
+CafeDisplay * CafeDesktop::display() const { return display_class; }
+
 void CafeDesktop::init()
 {
     root_window->setWindow(
-    RootWindow(
-        display->display_device,
-        display->display_screen));
+    XRootWindow(
+        display()->display(),
+        display()->screen()));
     
     root_desktop = new CafeWindow;
-    root_desktop->setDisplay(display);
+    root_desktop->setDisplay(display());
+    
+    root_desktop->setWidth (800);
+    root_desktop->setHeight(600);
+    
     root_desktop->setWindow(
         XCreateSimpleWindow(
-        display->display_device,
-        root_window->window(), 0, 0, 800,600, 5,
+            display()->display(),
+            root_window ->window(), 0, 0,
+            root_desktop->width (),
+            root_desktop->height(), 5,
         BlackPixel(
-            display->display_device,
-            display->display_screen),
+            display()->display(),
+            display()->screen ()),
         WhitePixel(
-            display->display_device,
-            display->display_screen) ));
-    current_window  = root_desktop;
-    current_display = root_desktop->display()->display_device;
+            display()->display(),
+            display()->screen ()) ));
+//  current_window  = root_desktop;
+//  current_display = root_desktop->display()->display_device;
     
     //
     root_window->win_id++;
@@ -67,7 +75,7 @@ void CafeDesktop::init()
     
     XSizeHints hints_flags = root_desktop->hintsFlags();
     XSetStandardProperties(
-        display->display_device,
+        display()->display(),
         root_desktop->window(),
         "TestWindow",
         "",
@@ -75,12 +83,35 @@ void CafeDesktop::init()
 
     // set needed events ...
     XSelectInput(
-        display->display_device,
+        display()->display(),
         root_desktop->window(),
         ButtonPressMask | ButtonReleaseMask |
         KeyPressMask    | KeyReleaseMask    |
         EnterWindowMask | LeaveWindowMask   | ExposureMask);
         
+    
+    int xpos = 0;
+    int ypos = root_desktop->height();
+    int wpos = root_desktop->width ();
+    int hpos = 40;
+    
+    root_taskbar = new CafeWindow;
+    root_taskbar->setDisplay(display());
+    root_taskbar->setWindow(
+        XCreateSimpleWindow(
+        display()->display(),
+        root_desktop->window(),
+        xpos, ypos - hpos,
+        wpos, hpos,
+        5,
+        BlackPixel(
+            display()->display(),
+            display()->screen()),
+        WhitePixel(
+            display()->display(),
+            display()->screen()) ));
+    
+    
     root_desktop->showModal();
 }
 
