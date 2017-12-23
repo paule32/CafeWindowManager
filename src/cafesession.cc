@@ -2,6 +2,7 @@
 #include <cafedisplay.h>
 #include <cafesession.h>
 #include <cafedesktop.h>
+#include <cafewindow.h>
 #include <cafeprocessevent.h>
 
 using namespace std;
