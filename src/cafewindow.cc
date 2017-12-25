@@ -170,7 +170,7 @@ void CafeWindow::drawGraphics()
     }
     
     
-    // --------------------------
+    // ---------------------------------
     // clear, and free buffer ...
     // --------------------------
     XFlush (display()->display());
