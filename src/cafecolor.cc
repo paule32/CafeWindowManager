@@ -1,6 +1,4 @@
-#include <cafewm.h>
 #include <cafecolor.h>
-#include <cafewindow.h>
 
 #include <sstream>
 #include <iomanip>

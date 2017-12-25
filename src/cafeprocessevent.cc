@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <sys/time.h>
 
 #include <cafewm.h>
@@ -45,8 +46,10 @@ CafeProcessEvent::CafeProcessEvent(CafeWindow *win)
     int quit = 0;
     int pause = 0;
     int td;
+
     setWindow(win);
     gettimeofday(&st, nullptr);
+
     while (!quit) {
         // +++ timer start +++ //
         gettimeofday(&rt, nullptr);
@@ -58,30 +61,30 @@ CafeProcessEvent::CafeProcessEvent(CafeWindow *win)
     }
 }
 
-CafeWindow * CafeProcessEvent::window() const { return w; }
-void CafeProcessEvent::setWindow(CafeWindow *v) { w = v; }
+CafeWindow  * CafeProcessEvent::window () const { return win;  }
+void CafeProcessEvent::setWindow (CafeWindow  *v) { win  = v; }
+
 
 int CafeProcessEvent::eventLoop()
 {
     XEvent xev;
     int num_events;
-    
+
     XFlush(
         window ()->
-        display()->display_device);
-    num_events =
-    XPending(
+        display()->display());
+
+    num_events = XPending(
         window ()->
-        display()->display_device);
-    
-    while (num_events != 0) {
+        display()->display());
+
+    while ((num_events != 0)) {
         num_events--;
         XNextEvent(
             window ()->
-            display()->display_device, &xev);
+            display()->display(), &xev);          
         processEvent(xev);
-    }
-    
+    }    
     return 0;
 }
 
@@ -92,7 +95,7 @@ int CafeProcessEvent::processEvent(XEvent xev)
     int  buffer_size = 128;
     
     char position[50] = {0};
-    
+   
     switch (xev.type) {
     case KeyPress:
         key = XLookupKeysym (&xev.xkey, 0);
@@ -108,7 +111,7 @@ int CafeProcessEvent::processEvent(XEvent xev)
             <<  " (keycode: "
             <<  XKeysymToKeycode(
                 window ()->
-                display()->display_device, key)
+                display()->display(), key)
             <<  ")"
             <<  std::endl;
         else
@@ -118,7 +121,7 @@ int CafeProcessEvent::processEvent(XEvent xev)
             <<  " (keycode: "
             <<  XKeysymToKeycode(
                 window ()->
-                display()->display_device, key)
+                display()->display(), key)
             <<  ")"
             <<  std::endl;
         break;
@@ -225,7 +228,7 @@ int CafeProcessEvent::processEvent(XEvent xev)
     case EnterNotify:
         XSetInputFocus(
             window ()->
-            display()->display_device,
+            display()->display(),
             window ()->window(),
             RevertToParent,
             CurrentTime);
@@ -237,7 +240,7 @@ int CafeProcessEvent::processEvent(XEvent xev)
     case LeaveNotify:
         XSetInputFocus(
             window ()->
-            display()->display_device,
+            display()->display(),
             window ()->window(),
             RevertToParent,
             CurrentTime);

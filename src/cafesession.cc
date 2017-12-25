@@ -10,23 +10,22 @@ namespace kallup {
 
 CafeSession::CafeSession()
 {
-    auto * display = new CafeDisplay;
-    if (!display->is_ok())
-    throw display;
+    CafeProcessEvent * event   = nullptr;
     
-    desktop = new CafeDesktop(display);
+    CafeDisplay      * display = nullptr;
+    CafeWindow       * desktop = nullptr;
+    CafeWindow       * rootwin = nullptr;
     
-    auto * event = new CafeProcessEvent(desktop->root_desktop);
+    display = new CafeDisplay(this);
+    rootwin = new CafeWindow(display);
+    desktop = new CafeWindow(rootwin);
+    printf("jopster\n");
+    event   = new CafeProcessEvent(desktop);
     delete event;
 }
 
 CafeSession::~CafeSession()
-{
-std::cout << "session delete" << std::endl;
-
-    delete desktop;
-    delete display;
-    
+{   
     std::cout << "Thank You, for using cafewm!" << std::endl
               << "Have a nice day."
               << std::endl;

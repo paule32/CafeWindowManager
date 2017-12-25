@@ -8,17 +8,20 @@ namespace kallup {
 class CafeProcessEvent {
 public:
     explicit CafeProcessEvent();
-    explicit CafeProcessEvent(CafeWindow *);
-    ~CafeProcessEvent();
+    explicit CafeProcessEvent(CafeWindow*);
+            ~CafeProcessEvent();
     
+    // getter ...        
     CafeWindow * window() const;
+    
+    // setter ...
     void setWindow(CafeWindow*);
 
 private:    
     int eventLoop();
     int processEvent(XEvent);
-    
-    CafeWindow * w;
+
+    CafeWindow * win;
 };
 
 }

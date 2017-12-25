@@ -1,31 +1,36 @@
-#include <cafewm.h>
 #include <cafedesktop.h>
-#include <cafewindow.h>
-#include <cafedisplay.h>
 
+#if 0
 namespace kallup  {
-CafeWindow * current_window ;
+CafeDesktop::CafeDesktop(CafeWindow *win)
+{
+    setRootWindow(win);
+    setDisplay(win->display());
+    root_window  = win;
+}
+
 CafeDesktop::CafeDesktop(CafeDisplay * displ)
 {
-    XVisualInfo vinfo;
     setDisplay(displ);
-        
-    if (!XMatchVisualInfo(display()->display(), 0, 32, TrueColor, &vinfo))
-    if (!XMatchVisualInfo(display()->display(), 0, 24, TrueColor, &vinfo))
-    if (!XMatchVisualInfo(display()->display(), 0, 16, TrueColor, &vinfo))
-    {
-        std::cout
-        << "Cannot get TrueColor Visual!"
-        << std::endl;
-        exit(EXIT_FAILURE);
-    }
+        printf("56666jsadkldkjlas6\n");
+    root_window  = new CafeWindow(display());
+        printf("566666\n");
     
-    display()->setVisual(vinfo.visual);
-    display()->setDepth (vinfo.depth );
-    display()->setScreen(vinfo.screen);
-
-    root_window = new CafeWindow;
- 
+    root_window->setWidth (800);
+    root_window->setHeight(600);
+    printf("566666\n");
+    root_window->setMinWidth(root_window->width());
+    root_window->setMaxWidth(root_window->width());
+    
+    root_window->setMinHeight(root_window->height());
+    root_window->setMaxHeight(root_window->height());
+    root_window->setHints();
+    
+        printf("566666\n");
+    
+    root_desktop = new CafeWindow(root_window );  win_id++;
+    root_taskbar = new CafeWindow(root_desktop);  win_id++;
+    
     init();
 }
 
@@ -35,84 +40,46 @@ CafeDesktop::CafeDesktop()
 
 CafeDisplay * CafeDesktop::display() const { return display_class; }
 
+CafeWindow  * CafeDesktop::rootwin() const { return root_window ; }
+CafeWindow  * CafeDesktop::desktop() const { return root_desktop; }
+CafeWindow  * CafeDesktop::taskbar() const { return root_taskbar; }
+
+void CafeDesktop::setDisplay   (CafeDisplay *v) { display_class = v; }
+void CafeDesktop::setRootWindow(CafeWindow  *v) { root_window   = v; }
+void CafeDesktop::setDesktop   (CafeWindow  *v) { root_desktop  = v; }
+void CafeDesktop::setTaskbar   (CafeWindow  *v) { root_taskbar  = v; }
+
 void CafeDesktop::init()
 {
-    root_window->setWindow(
-    XRootWindow(
-        display()->display(),
-        display()->screen()));
+    win_id++;
+    printf("dsdsd\n");
+    /*
+    root_taskbar->setMinWidth(200);
+    root_taskbar->setMaxWidth(400);
     
-    root_desktop = new CafeWindow;
-    root_desktop->setDisplay(display());
+    root_taskbar->setMinHeight(20);
+    root_taskbar->setMaxHeight(60);
     
-    root_desktop->setWidth (800);
-    root_desktop->setHeight(600);
-    
-    root_desktop->setWindow(
-        XCreateSimpleWindow(
-            display()->display(),
-            root_window ->window(), 0, 0,
-            root_desktop->width (),
-            root_desktop->height(), 5,
-        BlackPixel(
-            display()->display(),
-            display()->screen ()),
-        WhitePixel(
-            display()->display(),
-            display()->screen ()) ));
-//  current_window  = root_desktop;
-//  current_display = root_desktop->display()->display_device;
-    
-    //
-    root_window->win_id++;
-    root_desktop->setFlags(PSize | PMinSize | PMaxSize);
-    
-    root_desktop->setMinWidth(800);
-    root_desktop->setMaxWidth(800);
-    
-    root_desktop->setMinHeight(600);
-    root_desktop->setMaxHeight(600);
-    
-    XSizeHints hints_flags = root_desktop->hintsFlags();
+    XSizeHints hints_flags2 = root_taskbar->hintsFlags();
     XSetStandardProperties(
         display()->display(),
-        root_desktop->window(),
-        "TestWindow",
+        root_taskbar->window(),
+        "TestWindow2",
         "",
-        None, 0,0, &hints_flags);
-
+        None, 0,0, &hints_flags2);
+            
     // set needed events ...
     XSelectInput(
         display()->display(),
-        root_desktop->window(),
+        root_taskbar->window(),
         ButtonPressMask | ButtonReleaseMask |
         KeyPressMask    | KeyReleaseMask    |
         EnterWindowMask | LeaveWindowMask   | ExposureMask);
-        
-    
-    int xpos = 0;
-    int ypos = root_desktop->height();
-    int wpos = root_desktop->width ();
-    int hpos = 40;
-    
-    root_taskbar = new CafeWindow;
-    root_taskbar->setDisplay(display());
-    root_taskbar->setWindow(
-        XCreateSimpleWindow(
+
+    XMapWindow(
         display()->display(),
-        root_desktop->window(),
-        xpos, ypos - hpos,
-        wpos, hpos,
-        5,
-        BlackPixel(
-            display()->display(),
-            display()->screen()),
-        WhitePixel(
-            display()->display(),
-            display()->screen()) ));
-    
-    
-    root_desktop->showModal();
+        root_taskbar->window());
+        */
 }
 
 CafeDesktop::~CafeDesktop()
@@ -127,3 +94,4 @@ CafeDesktop::~CafeDesktop()
 }
 
 }  // namespace: kallup
+#endif

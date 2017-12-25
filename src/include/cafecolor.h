@@ -5,6 +5,7 @@
 #include <cafewindow.h>
 
 namespace kallup {
+class CafeWindow;
 class CafeColor {
 public:
     explicit CafeColor();

@@ -8,6 +8,7 @@
 // window structure list ...
 // ---------------------------------------
 namespace kallup {
+class CafeWindow;
 class CafeWindowList {
 public:
     explicit CafeWindowList();
