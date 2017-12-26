@@ -7,6 +7,10 @@ CafeWindow::CafeWindow() { }
 CafeWindow::CafeWindow(CafeDisplay *disp)
 {
     setDisplay(disp);
+
+    setWidth (display()->width ());
+    setHeight(display()->height());
+
     setWindow(        
         XCreateSimpleWindow(
         display()->display(),
@@ -14,8 +18,8 @@ CafeWindow::CafeWindow(CafeDisplay *disp)
         display()->display(),
         display()->screen()),
         0, 0,
-        display()->width (),
-        display()->height(), 2,
+        width (),
+        height(), 2,
     BlackPixel(
         display()->display(),
         display()->screen ()),
@@ -23,15 +27,27 @@ CafeWindow::CafeWindow(CafeDisplay *disp)
         display()->display(),
         display()->screen ()) ));
         
-   setHints();
-   show();
+    win_gc = XCreateGC(
+    display()->display(),
+    XRootWindow (
+    display()->display(),
+    display()->screen()), 0,0);
+
+    setBackgroundColor(new CafeColor(this,0,100,150));
+    win_hwnd = win_id++;
+
+    setHints();
+    show();
 }
 
 CafeWindow::CafeWindow(CafeWindow *par_ent)
 {
     setParent (par_ent);
     setDisplay(parent()->display());
-    
+
+    setWidth (parent()->width ());
+    setHeight(parent()->height());
+
     setWindow(
         XCreateSimpleWindow(
         display()->display(),
@@ -44,7 +60,16 @@ CafeWindow::CafeWindow(CafeWindow *par_ent)
     WhitePixel(
         display()->display(),
         display()->screen ()) ));
-        
+
+    win_gc = XCreateGC(
+    display()->display(),
+    XRootWindow (
+    display()->display(),
+    display()->screen()), 0,0);
+
+    setBackgroundColor(new CafeColor(this,220,120,150));
+    win_hwnd = win_id++;
+            
     setHints();
     show();
 }
@@ -57,26 +82,48 @@ CafeWindow  * CafeWindow::parent  () const { return win_parent;     }
 
 std::string   CafeWindow::title   () const { return win_title;      }
 hwnd          CafeWindow::HWND    () const { return win_hwnd;       }
-CafeRect      CafeWindow::pos     () const { return win_pos;        }
+CafeRect    * CafeWindow::pos     () const { return win_pos;        }
 
 void CafeWindow::setWindow(Window v) { win = v; }
 void CafeWindow::setDisplay(CafeDisplay *v) { display_object = v; }
 
 void CafeWindow::setTitle(std::string v) { win_title = v; }
-void CafeWindow::setPos(CafeRect v) { win_pos = v; }
+void CafeWindow::setPos(CafeRect *v) { win_pos = v; }
 void CafeWindow::setWindowGC(GC v) { win_gc = v; }
 void CafeWindow::setParent(CafeWindow *v) { win_parent = v; }
 
+CafeColor * CafeWindow::backgroundColor() const {
+    return win_backgroundColor;
+}
+void CafeWindow::setBackgroundColor(CafeColor *col) {
+    win_backgroundColor = col;
+}
+
+void CafeWindow::setBackgroundColor(int r, int g, int b)
+{
+    win_gc = XCreateGC(
+        display()->display(),
+        window (),
+        0,0);
+    if (win_backgroundColor == nullptr)
+        win_backgroundColor = new CafeColor(this,r,g,b); else
+        win_backgroundColor->setColor(r,g,b);
+}
+
 void CafeWindow::setWidth(int v)
 {
-    CafeRect rect;
-    rect.setWidth(v);
+    if (win_pos == nullptr)
+        win_pos = new CafeRect;
+
+    pos()->setWidth(v);
 }
 
 void CafeWindow::setHeight(int v)
 {
-    CafeRect rect;
-    rect.setHeight(v);
+    if (win_pos == nullptr)
+        win_pos = new CafeRect;
+
+    pos()->setHeight(v);
 }
 
 void CafeWindow::setFlags(int v) { size_hints.flags = v; }
@@ -116,12 +163,20 @@ int CafeWindow::maxWidth() { return size_hints.max_width; }
 int CafeWindow::minHeight() { return size_hints.min_height; }
 int CafeWindow::maxHeight() { return size_hints.max_height; }
 
-int CafeWindow::width () const { return pos().width (); }
-int CafeWindow::height() const { return pos().height(); }
+int CafeWindow::width () const { return pos()->width (); }
+int CafeWindow::height() const { return pos()->height(); }
 
 XSizeHints CafeWindow::hintsFlags() { return size_hints; }
 
-CafeWindow::~CafeWindow() { }
+CafeWindow::~CafeWindow()
+{
+    // ---------------------------------
+    // clear, and free buffer ...
+    // --------------------------
+    XFlush (display()->display());
+    XFreeGC(display()->display(), windowGC());
+}
+
 int CafeWindow::show()
 {
     XMapWindow(
@@ -133,48 +188,39 @@ int CafeWindow::show()
 
 void CafeWindow::drawGraphics()
 {
-//    if (!windowGC())
-    win_gc = XCreateGC(
-        display()->display(),
-        window (),
-        0,0);
-
-    XWindowAttributes attrs;
-    XGetWindowAttributes(
-        display()->display(),
-        window (),
-        &attrs);
-
     // -----------------------
     // 0=root, 1=desktop, ...
     // -----------------------
-//    if (HWND() == 0)
+    if (HWND() == 0)
     {
         CafeColor col(this,0,100,150);
+
+std::cout
+<< "win: " << window  () << std::endl
+<< "gc:  " << windowGC() << std::endl;
         XFillRectangle(
             display()->display(),
             window(),
             windowGC(),
             0, 0,
-            attrs.width,
-            attrs.height);
-    
-   
-        CafeColor col2(this,120,120,150);
+            width (),
+            height());
+    }
+        #if 0
+    else
+    {
+   printf("ww--> %d\n", width());
+   std::cout << "wi: " << width() << std::endl;
+        CafeColor col2(this,220,120,150);
         XFillRectangle(
             display()->display(),
             window(),
             windowGC(),
-            20, 20,
-            200,200);
+            2, 20,
+            width()-100,
+            200);
     }
-    
-    
-    // ---------------------------------
-    // clear, and free buffer ...
-    // --------------------------
-    XFlush (display()->display());
-    XFreeGC(display()->display(), windowGC());
+        #endif
 }
 
 }  // namespace: kallup

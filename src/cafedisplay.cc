@@ -28,7 +28,9 @@ CafeDisplay::CafeDisplay(CafeSession *sess)
         << std::endl;
         exit(EXIT_FAILURE);
     }
-    
+
+    setSession(sess);
+        
     setVisual(vinfo.visual);
     setDepth (vinfo.depth );
     setScreen(vinfo.screen);
@@ -36,7 +38,6 @@ CafeDisplay::CafeDisplay(CafeSession *sess)
     setWidth (800);
     setHeight(600);
 
-    setSession(sess);
     setOK(true);
 }
 

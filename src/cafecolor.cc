@@ -18,6 +18,7 @@ CafeColor::CafeColor(
 {
     setWindow(win);
     setColor(r,g,b);
+    printf("5555\n");
 }
 
 XColor       CafeColor::color () const { return color_intern; }
@@ -61,10 +62,11 @@ void CafeColor::setColor(
        << std::hex
        << buffer;
     ss >> c;
-
+printf("88888\n");
     XSetForeground(
         window()->display()->display(),
         window()->windowGC(),c);
+printf("98887\n");
 }
 
 }  // namespace: kallup

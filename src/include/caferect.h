@@ -5,6 +5,7 @@ namespace kallup {
 class CafeRect {
 public:
     explicit CafeRect();
+    explicit CafeRect(int,int,int,int);
     
     // getter ...
     int x() const;

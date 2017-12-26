@@ -13,6 +13,7 @@ namespace kallup {
 typedef int  hwnd;   // window handle number: HWND
 extern  hwnd win_id;
 
+class CafeColor;
 class CafeDisplay;
 class CafeWindow {
 public:
@@ -22,13 +23,14 @@ public:
             ~CafeWindow();
     
     // getter ...
-    CafeRect pos() const;
+    CafeRect  * pos() const;
     Window window() const;
     GC windowGC() const;
     hwnd HWND() const;
     
     CafeDisplay * display() const;
     CafeWindow  * parent () const;
+    CafeColor   * backgroundColor() const;
     
     std::string title() const;
     
@@ -48,11 +50,13 @@ public:
     void setWindow(Window);
     void setWindowGC(GC);
     void setParent(CafeWindow*);
+    void setBackgroundColor(CafeColor*);
+    void setBackgroundColor(int,int,int);
 
     void setDisplay(CafeDisplay*);
     void setTitle(std::string);
     void setHints();
-    void setPos(CafeRect);
+    void setPos(CafeRect*);
     
     void setFlags(int);
     
@@ -73,8 +77,9 @@ private:
     hwnd          win_hwnd;
     CafeWindow  * win_parent;
     GC            win_gc;
+    CafeColor   * win_backgroundColor;
     std::string   win_title;
-    CafeRect      win_pos;
+    CafeRect    * win_pos;
     XSizeHints    size_hints;
     CafeDisplay * display_object;
 };

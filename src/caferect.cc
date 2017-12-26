@@ -11,6 +11,18 @@ CafeRect::CafeRect()
     pos_h = 0;
 }
 
+CafeRect::CafeRect(
+    int x,
+    int y,
+    int w,
+    int h)
+{
+    setX(x);
+    setY(y);
+    setWidth (w);
+    setHeight(h);
+}
+
 // getter ...
 int CafeRect::x()      const { return pos_x; }
 int CafeRect::y()      const { return pos_y; }
