@@ -9,9 +9,7 @@ using namespace std;
 namespace kallup {
 
 CafeSession::CafeSession()
-{
-    CafeProcessEvent * event   = nullptr;
-    
+{  
     CafeDisplay      * display = nullptr;
     CafeWindow       * desktop = nullptr;
     CafeWindow       * rootwin = nullptr;
@@ -19,9 +17,14 @@ CafeSession::CafeSession()
     display = new CafeDisplay(this);
     rootwin = new CafeWindow(display);
     desktop = new CafeWindow(rootwin);
-    printf("jopster\n");
-    event   = new CafeProcessEvent(desktop);
-    delete event;
+
+    auto * event1 = new CafeProcessEvent(rootwin);
+    auto * event2 = new CafeProcessEvent(desktop);
+
+    event2->startEventLoop();
+
+    delete event2;
+    delete event1;
 }
 
 CafeSession::~CafeSession()

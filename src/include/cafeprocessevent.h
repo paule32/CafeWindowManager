@@ -16,6 +16,7 @@ public:
     
     // setter ...
     void setWindow(CafeWindow*);
+    void startEventLoop();
 
 private:    
     int eventLoop();

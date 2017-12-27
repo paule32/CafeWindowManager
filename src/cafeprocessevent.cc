@@ -8,6 +8,8 @@
 
 namespace kallup {
 
+std::list<CafeWindow*> windows;
+
 #define FRAME_LEN    50000
 
 #define MOUSE_LEFT   1
@@ -43,13 +45,20 @@ static int time_diff(void)
 CafeProcessEvent::CafeProcessEvent() { }
 CafeProcessEvent::CafeProcessEvent(CafeWindow *win)
 {
+    windows.push_back(win);
+std::cout << "dsdsdsdjaskljasdkjasjdkljasdljlas" << std::endl;
+}
+
+CafeWindow  * CafeProcessEvent::window () const { return win;  }
+void CafeProcessEvent::setWindow (CafeWindow  *v) { win  = v; }
+
+void CafeProcessEvent::startEventLoop()
+{
     int quit = 0;
     int pause = 0;
     int td;
 
-    setWindow(win);
     gettimeofday(&st, nullptr);
-
     while (!quit) {
         // +++ timer start +++ //
         gettimeofday(&rt, nullptr);
@@ -61,14 +70,13 @@ CafeProcessEvent::CafeProcessEvent(CafeWindow *win)
     }
 }
 
-CafeWindow  * CafeProcessEvent::window () const { return win;  }
-void CafeProcessEvent::setWindow (CafeWindow  *v) { win  = v; }
-
-
 int CafeProcessEvent::eventLoop()
 {
     XEvent xev;
     int num_events;
+
+    for (auto it = std::begin(windows); it != std::end(windows); ++it)
+    setWindow(*it);
 
     XFlush(
         window ()->
@@ -137,7 +145,9 @@ int CafeProcessEvent::processEvent(XEvent xev)
                     xev.xmotion.x,
                     xev.xmotion.y);
                 std::cout
-                << "left mouse pressed at: "
+                << "window: "
+                << std::dec << window()
+                << " , left mouse pressed at: "
                 << position
                 << std::endl;
                 break;

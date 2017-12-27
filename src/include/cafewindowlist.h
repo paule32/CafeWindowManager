@@ -12,6 +12,7 @@ class CafeWindow;
 class CafeWindowList {
 public:
     explicit CafeWindowList();
+
     CafeWindow * win_title;
     CafeWindow * win_icon;
     CafeWindow * win_frame;

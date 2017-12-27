@@ -1,5 +1,10 @@
 #include <cafewindow.h>
 
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
 namespace kallup {
 hwnd win_id = 0;
 
@@ -45,15 +50,15 @@ CafeWindow::CafeWindow(CafeWindow *par_ent)
     setParent (par_ent);
     setDisplay(parent()->display());
 
-    setWidth (parent()->width ());
-    setHeight(parent()->height());
+    setWidth (200); //parent()->width ());
+    setHeight(200); //parent()->height());
 
     setWindow(
         XCreateSimpleWindow(
         display()->display(),
-        parent ()->window (), 0, 0,
-        parent ()->width  ()-2,
-        parent ()->height ()-2, 1,
+        parent ()->window (), 40, 40,
+        width  ()-2,
+        height ()-2, 1,
     BlackPixel(
         display()->display(),
         display()->screen ()),
@@ -67,7 +72,7 @@ CafeWindow::CafeWindow(CafeWindow *par_ent)
     display()->display(),
     display()->screen()), 0,0);
 
-    setBackgroundColor(new CafeColor(this,220,120,150));
+    setBackgroundColor(new CafeColor(this,220,180,180));
     win_hwnd = win_id++;
             
     setHints();
@@ -95,8 +100,31 @@ void CafeWindow::setParent(CafeWindow *v) { win_parent = v; }
 CafeColor * CafeWindow::backgroundColor() const {
     return win_backgroundColor;
 }
-void CafeWindow::setBackgroundColor(CafeColor *col) {
+void CafeWindow::setBackgroundColor(CafeColor *col)
+{
+    char buffer[24];
+    unsigned long c;
+
     win_backgroundColor = col;
+    win_backgroundColor->setRed  (col->red  ());
+    win_backgroundColor->setGreen(col->green());
+    win_backgroundColor->setBlue (col->blue ());
+
+    sprintf(buffer,"0x00%02x%02x%02x",
+        col->red(),
+        col->green(),
+        col->blue());
+    
+    std::stringstream ss;
+    ss << std::setfill('0')
+       << std::setw(10)
+       << std::hex
+       << buffer;
+    ss >> c;
+
+    XSetWindowBackground(
+        display()->display(),
+        window (),c);
 }
 
 void CafeWindow::setBackgroundColor(int r, int g, int b)
@@ -131,11 +159,11 @@ void CafeWindow::setHints()
 {
     setFlags(PSize | PMinSize | PMaxSize);
     
-    setMinWidth(display()->width());
-    setMaxWidth(display()->width());
+    setMinWidth(width());
+    setMaxWidth(width());
     
-    setMinHeight(display()->height());
-    setMaxHeight(display()->height());
+    setMinHeight(height());
+    setMaxHeight(height());
     
     XSetStandardProperties(
     display()->display(),
@@ -191,9 +219,9 @@ void CafeWindow::drawGraphics()
     // -----------------------
     // 0=root, 1=desktop, ...
     // -----------------------
-    if (HWND() == 0)
+//    if (HWND() == 0)
     {
-        CafeColor col(this,0,100,150);
+//        CafeColor col(this,0,100,150);
 
 std::cout
 << "win: " << window  () << std::endl
@@ -206,21 +234,16 @@ std::cout
             width (),
             height());
     }
-        #if 0
-    else
-    {
-   printf("ww--> %d\n", width());
-   std::cout << "wi: " << width() << std::endl;
-        CafeColor col2(this,220,120,150);
+/*
+        CafeColor col2(this,220,180,180);
         XFillRectangle(
             display()->display(),
             window(),
             windowGC(),
-            2, 20,
+            12, 20,
             width()-100,
-            200);
-    }
-        #endif
+            200);*/
+
 }
 
 }  // namespace: kallup
